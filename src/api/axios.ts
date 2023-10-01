@@ -6,7 +6,7 @@ const live_url = "https://voters-info.onrender.com/api/v1/";
 
 export default axios.create({
   baseURL: live_url,
-  timeout: 2500,
+  timeout: 5000,
 });
 
 export const axiosPrivate = axios.create({
