@@ -21,17 +21,18 @@ const LoginPage: React.FC = () => {
   const form = useForm<Omit<User, "id" | "role">>({
     validateInputOnChange: true,
     initialValues: {
-      email: "",
+      username: "",
       password: "",
     },
     validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
+      username: (value) =>
+        /^\S+@\S+$/.test(value) ? null : "Invalid username",
       password: (value) => (value === "" ? "Password is required" : null),
     },
   });
 
   const onSubmitHandler = async (user: Omit<User, "_id" | "role">) => {
-    await login(user.email, user.password)
+    await login(user.username, user.password)
       .then((res) => {
         toast.success(res.message as string);
         navigate("/dashboard");
@@ -58,10 +59,10 @@ const LoginPage: React.FC = () => {
       <form onSubmit={form.onSubmit(onSubmitHandler as any)}>
         <Paper withBorder shadow="md" p={30} mt={30} radius="md">
           <TextInput
-            label="Email"
+            label="username"
             placeholder="you@mantine.dev"
             required
-            {...form.getInputProps("email")}
+            {...form.getInputProps("username")}
           />
           <PasswordInput
             label="Password"

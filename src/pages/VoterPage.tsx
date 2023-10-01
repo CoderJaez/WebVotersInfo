@@ -15,26 +15,19 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import moment from "moment";
-import useClassroom from "@services/ClassroomService";
-import useClassroomStore from "store/classroom.store";
+import useVoter from "@services/VoterService";
+import useVoterStore from "@store/voter.store";
 import { useDisclosure } from "@mantine/hooks";
 import { Edit, Trash } from "tabler-icons-react";
-import { Classroom } from "types";
+import { VoterInfo } from "types";
 import { ToastContainer, toast } from "react-toastify";
 import { ConfirmationDialog } from "@components/utils";
 
-const ClassroomPage: React.FC = () => {
-  const {
-    loading,
-    getClassroom,
-    addClassroom,
-    updateClassroom,
-    removeClassroom,
-  } = useClassroom();
-  const { classrooms, setClassrooms, addOneClassroom, removeOneClassroom } =
-    useClassroomStore();
+const VoterPage: React.FC = () => {
+  const { loading, getVoter, addVoter, updateVoter, removeVoter } = useVoter();
+  const { voters, setVoters, addOneVoter, removeOneVoter } = useVoterStore();
   const [opened, { open, close }] = useDisclosure(false);
-  const [classroom, setClassroom] = useState<Classroom | null>(null);
+  const [voter, setVoter] = useState<VoterInfo | null>(null);
   const [search, setSearch] = useState("");
   const [isConfirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
 
@@ -43,9 +36,9 @@ const ClassroomPage: React.FC = () => {
   };
 
   const fetchData = async (search: string) => {
-    await getClassroom(search)
+    await getVoter(search)
       .then((res) => {
-        setClassrooms(res);
+        setVoters(res);
       })
       .catch((err) => {
         console.log("Error: ", err);
@@ -54,19 +47,30 @@ const ClassroomPage: React.FC = () => {
 
   const form = useForm({
     validateInputOnChange: true,
-    initialValues: { roomNo: "" },
+    initialValues: {
+      firstname: "",
+      lastname: "",
+      middlename: "",
+      votersId: "",
+      precinctNo: "",
+      gender: "",
+      address: "",
+      city: "",
+      province: "",
+      image_path: "",
+    },
     validate: {
-      roomNo: (value) =>
-        value.trim().length !== 0 ? null : "Room no is required",
+      firstname: (value) =>
+        value.trim().length !== 0 ? null : "firstname is required",
     },
   });
 
   const onSubmitHandler = async (values: typeof form.values) => {
     try {
-      if (classroom == null) {
-        await addClassroom(values.roomNo)
+      if (voter == null) {
+        await addVoter(values as Omit<VoterInfo, "_id">)
           .then((res) => {
-            addOneClassroom(res.data as Classroom);
+            addOneVoter(res.data as VoterInfo);
             toast.success(res.message as string);
           })
           .catch((err: any) => {
@@ -77,18 +81,18 @@ const ClassroomPage: React.FC = () => {
             }
           });
       } else {
-        await updateClassroom(values.roomNo, classroom._id)
+        await updateVoter(values as Omit<VoterInfo, "_id">, voter._id)
           .then((res) => {
-            const updatedClassroom = {
-              ...classroom,
-              ...{ roomNo: values.roomNo },
+            const updatedVoter = {
+              ...voter,
+              ...values,
             };
-            const newItems = classrooms.map((room) =>
-              room._id === updatedClassroom._id ? updatedClassroom : room,
+            const newItems = voters.map((room) =>
+              room._id === updatedVoter._id ? updatedVoter : room,
             );
-            setClassrooms(newItems);
+            setVoters(newItems);
             toast.success(res.message as string);
-            setClassroom(null);
+            setVoter(null);
             form.reset();
           })
           .catch((err: any) => {
@@ -111,11 +115,11 @@ const ClassroomPage: React.FC = () => {
   const handleConfirmAction = async () => {
     // Add your logic for the confirmation action here
     // For example, delete an item or perform a critical action
-    await removeClassroom(classroom?._id as string)
+    await removeVoter(voter?._id as string)
       .then((res) => {
         toast.success(res.message as string);
-        removeOneClassroom(classroom?._id as string);
-        setClassroom(null);
+        removeOneVoter(voter?._id as string);
+        setVoter(null);
       })
       .catch((err: any) => {
         if (err.status === 400) {
@@ -129,9 +133,13 @@ const ClassroomPage: React.FC = () => {
     handleCloseConfirmationDialog();
   };
   const editRoom = (id: string) => {
-    const _classroom = classrooms.find((room) => room._id === id);
-    setClassroom(_classroom as Classroom);
-    form.setFieldValue("roomNo", _classroom?.roomNo as string);
+    const _voter = voters.find((room) => room._id === id);
+    setVoter(_voter as VoterInfo);
+    form.setFieldValue("firstname", _voter?.firstname as string);
+    form.setFieldValue("middlename", _voter?.middlename as string);
+    form.setFieldValue("lastname", _voter?.lastname as string);
+    form.setFieldValue("gender", _voter?.gender as string);
+    form.setFieldValue("address", _voter?.address as string);
     open();
   };
 
@@ -151,9 +159,7 @@ const ClassroomPage: React.FC = () => {
           color="red"
           aria-label="delete"
           onClick={() => {
-            setClassroom(
-              classrooms.find((room) => room._id === id) as Classroom,
-            );
+            setVoter(voters.find((room) => room._id === id) as VoterInfo);
             setConfirmationDialogOpen(true);
           }}
         >
@@ -185,17 +191,17 @@ const ClassroomPage: React.FC = () => {
       <Card shadow="sm" p="md" radius="sm" withBorder>
         <Card.Section>
           <Title order={2} p="sm">
-            Classrooms
+            Voters
           </Title>
           <Group justify="space-between" m="md">
             <Button
               onClick={() => {
                 form.reset();
-                setClassroom(null);
+                setVoter(null);
                 open();
               }}
             >
-              New Classroom
+              New Voter
             </Button>
             <TextInput
               placeholder="Search"
@@ -208,31 +214,22 @@ const ClassroomPage: React.FC = () => {
           <Table>
             <Table.Thead>
               <Table.Tr>
-                <Table.Th>Room No</Table.Th>
-                <Table.Th>Occupied</Table.Th>
-                <Table.Th>Created At</Table.Th>
-                <Table.Th>Updated At</Table.Th>
+                <Table.Th>Id</Table.Th>
+                <Table.Th>Name</Table.Th>
+                <Table.Th>Gender</Table.Th>
+                <Table.Th>Address</Table.Th>
                 <Table.Th>Action</Table.Th>
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              {classrooms.map((element) => (
+              {voters.map((element) => (
                 <Table.Tr key={element._id}>
-                  <Table.Td>{element.roomNo.toUpperCase()}</Table.Td>
+                  <Table.Td>{element._id}</Table.Td>
                   <Table.Td>
-                    {element.isOccupied ? "Occupied" : "Vacant"}
+                    {`${element.firstname} ${element.middlename} ${element.lastname}`}
                   </Table.Td>
-                  <Table.Td>
-                    {moment(element.createdAt.toString()).format(
-                      "MM DD, YYYY hh:mm:ss a",
-                    )}
-                  </Table.Td>
-                  <Table.Td>
-                    {moment(element.updatedAt.toString()).format(
-                      "MM DD, YYYY hh:mm:ss a",
-                    )}
-                  </Table.Td>
-                  <Table.Td>{action(element._id)}</Table.Td>
+                  <Table.Td>{action(element.gender)}</Table.Td>
+                  <Table.Td>{action(element.address)}</Table.Td>
                 </Table.Tr>
               ))}
             </Table.Tbody>
@@ -242,7 +239,7 @@ const ClassroomPage: React.FC = () => {
         <Modal
           opened={opened}
           onClose={close}
-          title="Classroom"
+          title="Voter"
           closeOnClickOutside={false}
           closeOnEscape
         >
@@ -265,4 +262,4 @@ const ClassroomPage: React.FC = () => {
   );
 };
 
-export default ClassroomPage;
+export default VoterPage;

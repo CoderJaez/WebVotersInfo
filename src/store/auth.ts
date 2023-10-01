@@ -1,14 +1,14 @@
 import { create } from "zustand";
-import { UserInfo, Response } from "types";
+import { User, Response } from "types";
 import { persist, createJSONStorage } from "zustand/middleware";
 import axios from "api/axios";
 
 interface UserState {
-  user: UserInfo | null;
+  user: User | null;
   accessToken: string | null;
   refreshToken: string | null;
   login: (email: string, password: string) => Promise<Response>;
-  setUser: (user: UserInfo) => void;
+  setUser: (user: User) => void;
   setAccessToken: (token: string) => void;
   setTokens: (accessToken: string, refreshToken: string) => void;
 }
@@ -17,15 +17,10 @@ const useAuthStore = create<UserState>()(
   persist(
     (set) => ({
       user: {
-        _id: "",
-        email: "",
-        role: "",
+        id: "",
+        username:"",
         password: "",
-        firstname: "",
-        middlename: "",
-        lastname: "",
-        contact_no: "",
-        image_path: "",
+        role: "",
       },
       accessToken: "",
       refreshToken: "",
@@ -65,7 +60,7 @@ const useAuthStore = create<UserState>()(
             });
         });
       },
-      setUser: (user: UserInfo) => set((state) => ({ ...state.user, user })),
+      setUser: (user: User) => set((state) => ({ ...state.user, user })),
       setAccessToken: (token: string) => set(() => ({ accessToken: token })),
       setTokens: (accessToken: string, refreshToken: string) =>
         set(() => ({ accessToken: accessToken, refreshToken: refreshToken })),
