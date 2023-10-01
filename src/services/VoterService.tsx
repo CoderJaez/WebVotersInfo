@@ -1,5 +1,5 @@
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
-import React, { useState } from "react";
+import { useState } from "react";
 import { VoterInfo, Response } from "../types";
 
 interface VoterResponse extends Response {

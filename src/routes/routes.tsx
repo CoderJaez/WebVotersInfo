@@ -1,15 +1,10 @@
 import { VoterPage, LoginPage } from "@pages/index";
-import {
-  Gauge,
-  Chalkboard,
-  Dashboard,
-  FileStack,
-  User,
-} from "tabler-icons-react";
+import { FileStack } from "tabler-icons-react";
 import { Route } from "types";
 
 const routes: Omit<Route, "leftSection" | "rightSection">[] = [
   { label: "Voters", path: "/voters", component: <VoterPage /> },
+  { label: "Login", path: "/login", component: <LoginPage /> },
 ];
 
 export const navLinks: Omit<Route, "component" | "rightSection">[] = [

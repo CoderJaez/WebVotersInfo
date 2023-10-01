@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import useAxiosPrivate from "@hooks/useAxiosPrivate";
-import { UserInfo, Response } from "types";
+import { Response, User } from "types";
 
 interface UserResponse extends Response {
-  user: UserInfo | null;
+  user: User | null;
 }
 
 const useUser = () => {
@@ -11,7 +11,7 @@ const useUser = () => {
   const axios = useAxiosPrivate();
 
   const getUsers = async (search: string) => {
-    return await new Promise<UserInfo[]>((resolve, reject) => {
+    return await new Promise<User[]>((resolve, reject) => {
       axios
         .get(`users?search=${search}`)
         .then((res) => {
@@ -26,7 +26,7 @@ const useUser = () => {
 
   const updateUser = async (
     id: string,
-    values: Omit<UserInfo, "_id" | "image_path" | "password">,
+    values: Omit<User, "_id" | "image_path" | "password">,
   ) => {
     setLoading(true);
     return await new Promise<Response>((resolve, reject) => {
@@ -51,7 +51,7 @@ const useUser = () => {
   };
 
   const addUser = async (
-    values: Omit<UserInfo, "_id" | "image_path" | "password">,
+    values: Omit<User, "_id" | "image_path" | "password">,
   ) => {
     setLoading(true);
     const value = { ...values, ...{ role: values.role.toLowerCase() } };

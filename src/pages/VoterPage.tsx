@@ -1,10 +1,8 @@
-import React, { SyntheticEvent, useState } from "react";
+import React, {  useState } from "react";
 import {
   Container,
   Button,
   Card,
-  Image,
-  Text,
   Group,
   Table,
   Title,
@@ -15,7 +13,6 @@ import {
   Stack,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import moment from "moment";
 import useVoter from "@services/VoterService";
 import useVoterStore from "@store/voter.store";
 import { useDisclosure } from "@mantine/hooks";

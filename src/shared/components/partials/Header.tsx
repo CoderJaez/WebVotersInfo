@@ -2,7 +2,6 @@ import {
   AppShell,
   Burger,
   Flex,
-  Image,
   Menu,
   Avatar,
   Text,
@@ -10,7 +9,6 @@ import {
   Group,
 } from "@mantine/core";
 import React, { forwardRef } from "react";
-import logo from "@assets/logo.png";
 import { User, Password, ChevronRight, Logout } from "tabler-icons-react";
 import useAuthStore from "store/auth";
 type props = {
