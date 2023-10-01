@@ -11,6 +11,7 @@ import {
   Modal,
   TextInput,
   ActionIcon,
+  Select,
   Stack,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
@@ -51,17 +52,18 @@ const VoterPage: React.FC = () => {
       firstname: "",
       lastname: "",
       middlename: "",
-      votersId: "",
-      precinctNo: "",
       gender: "",
       address: "",
-      city: "",
-      province: "",
-      image_path: "",
     },
     validate: {
       firstname: (value) =>
         value.trim().length !== 0 ? null : "firstname is required",
+      lastname: (value) =>
+        value.trim().length !== 0 ? null : "lastname is required",
+      gender: (value) =>
+        value.trim().length !== 0 ? null : "gender is required",
+      address: (value) =>
+        value.trim().length !== 0 ? null : "address is required",
     },
   });
 
@@ -228,8 +230,9 @@ const VoterPage: React.FC = () => {
                   <Table.Td>
                     {`${element.firstname} ${element.middlename} ${element.lastname}`}
                   </Table.Td>
-                  <Table.Td>{action(element.gender)}</Table.Td>
-                  <Table.Td>{action(element.address)}</Table.Td>
+                  <Table.Td>{element.gender}</Table.Td>
+                  <Table.Td>{element.address}</Table.Td>
+                  <Table.Td>{action(element._id)}</Table.Td>
                 </Table.Tr>
               ))}
             </Table.Tbody>
@@ -247,9 +250,29 @@ const VoterPage: React.FC = () => {
             <Stack>
               <TextInput
                 data-autofocus
-                label="Room No"
-                placeholder="Eg. IT102"
-                {...form.getInputProps("roomNo")}
+                label="Firstname"
+                {...form.getInputProps("firstname")}
+              />
+              <TextInput
+                data-autofocus
+                label="Middlename"
+                {...form.getInputProps("middlename")}
+              />
+              <TextInput
+                data-autofocus
+                label="Lastname"
+                {...form.getInputProps("lastname")}
+              />
+              <Select
+                label="Gender"
+                data={["male", "female"]}
+                {...form.getInputProps("gender")}
+              />
+
+              <TextInput
+                data-autofocus
+                label="Address"
+                {...form.getInputProps("address")}
               />
               <Button type="submit" loading={loading}>
                 Save

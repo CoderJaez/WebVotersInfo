@@ -21,11 +21,10 @@ type props = {
 interface UserButtonProps extends React.ComponentPropsWithoutRef<"button"> {
   image: string;
   name: string;
-  email: string;
   icon?: React.ReactNode;
 }
 const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(
-  ({ image, name, email, icon, ...others }: UserButtonProps, ref) => (
+  ({ image, name, icon, ...others }: UserButtonProps, ref) => (
     <UnstyledButton
       ref={ref}
       style={{
@@ -42,10 +41,6 @@ const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(
           <Text size="sm" fw={500}>
             {name}
           </Text>
-
-          <Text c="dimmed" size="xs">
-            {email}
-          </Text>
         </div>
 
         {icon || <ChevronRight size="1rem" />}
@@ -60,8 +55,7 @@ const Header: React.FC<props> = ({ opened, toggle }) => {
       <Flex justify="space-between" align="center">
         <Flex justify="flex-start" align="center">
           <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-          <Image src={logo} alt="QRClasstrack Logo" w={50} h={50} />
-          <span>QRClassTrack</span>
+          <span>Voters Information</span>
         </Flex>
         <Flex
           justify="flex-start"
@@ -70,11 +64,7 @@ const Header: React.FC<props> = ({ opened, toggle }) => {
         >
           <Menu shadow="md">
             <Menu.Target>
-              <UserButton
-                image={user?.image_path as string}
-                name={`${user?.firstname.toLocaleUpperCase()} ${user?.middlename.toLocaleUpperCase()} ${user?.lastname.toLocaleUpperCase()}`}
-                email={user?.email as string}
-              />
+              <UserButton image="" name={`${user?.username}`} />
             </Menu.Target>
             <Menu.Dropdown style={{ minWidth: 200 }}>
               <Menu.Item

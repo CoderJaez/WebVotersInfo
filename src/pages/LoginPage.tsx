@@ -25,8 +25,7 @@ const LoginPage: React.FC = () => {
       password: "",
     },
     validate: {
-      username: (value) =>
-        /^\S+@\S+$/.test(value) ? null : "Invalid username",
+      username: (value) => (value === "" ? "Username is required" : null),
       password: (value) => (value === "" ? "Password is required" : null),
     },
   });
@@ -35,7 +34,7 @@ const LoginPage: React.FC = () => {
     await login(user.username, user.password)
       .then((res) => {
         toast.success(res.message as string);
-        navigate("/dashboard");
+        navigate("/voters");
       })
       .catch((err: Response) => {
         toast.warn(err.message as string);
@@ -54,7 +53,7 @@ const LoginPage: React.FC = () => {
         pauseOnHover
         theme="light"
       />
-      <Title>Welcome back!</Title>
+      <Title style={{ textAlign: "center" }}>Voters Information System!</Title>
 
       <form onSubmit={form.onSubmit(onSubmitHandler as any)}>
         <Paper withBorder shadow="md" p={30} mt={30} radius="md">

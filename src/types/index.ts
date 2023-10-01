@@ -25,7 +25,6 @@ export interface VoterInfo {
   firstname: string;
   middlename?: string;
   lastname: string;
-  ext?: string;
   gender: string;
   address: string;
   image_path: string;

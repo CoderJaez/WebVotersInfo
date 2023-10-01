@@ -18,7 +18,7 @@ const useAuthStore = create<UserState>()(
     (set) => ({
       user: {
         id: "",
-        username:"",
+        username: "",
         password: "",
         role: "",
       },
@@ -28,27 +28,20 @@ const useAuthStore = create<UserState>()(
         return await new Promise<Response>((resolve, reject) => {
           axios
             .post("auth/login", {
-              email: email,
+              username: email,
               password: password,
             })
             .then((res) => {
-              if (res.data.user.role == "admin") {
-                const response: Response = {
-                  status: res.status,
-                  message: res.data.message,
-                };
-                // const user = { ...res.data.user, password: password };
-                const user = res.data.user;
-                set((state) => ({ ...state.user, user }));
-                set(() => ({ accessToken: res.data.access_token }));
-                set(() => ({ refreshToken: res.data.refresh_token }));
-                resolve(response);
-              } else {
-                reject({
-                  status: 200,
-                  message: "Only staff or admin can access the admin site. ",
-                });
-              }
+              const response: Response = {
+                status: res.status,
+                message: res.data.message,
+              };
+              // const user = { ...res.data.user, password: password };
+              const user = res.data.user;
+              set((state) => ({ ...state.user, user }));
+              set(() => ({ accessToken: res.data.access_token }));
+              set(() => ({ refreshToken: res.data.refresh_token }));
+            resolve(response);
             })
             .catch((err) => {
               console.log("Error:", err);

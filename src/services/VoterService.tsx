@@ -13,7 +13,7 @@ const useVoter = () => {
     return await new Promise<VoterInfo[]>((resolve, reject) => {
       setLoading(true);
       axiosPrivate
-        .get(`Voters?roomNo=${search}`)
+        .get(`Voters?search=${search}`)
         .then((res) => {
           const result: VoterInfo[] = res.data;
           resolve(result);
@@ -34,7 +34,7 @@ const useVoter = () => {
         .then((res) => {
           const result = {
             status: res.status,
-            data: res.data.data as VoterInfo,
+            data: res.data.voter as VoterInfo,
             message: res.data.message,
           };
           resolve(result);
