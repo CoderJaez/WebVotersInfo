@@ -2,6 +2,7 @@ import React from "react";
 import {
   Button,
   Container,
+  Text,
   Paper,
   PasswordInput,
   TextInput,
