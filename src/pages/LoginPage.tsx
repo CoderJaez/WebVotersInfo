@@ -51,7 +51,9 @@ const LoginPage: React.FC = () => {
         pauseOnHover
         theme="light"
       />
-      <Title style={{ textAlign: "center" }}>Voters Information System!</Title>
+      <Title style={{ textAlign: "center" }}>
+        Voters Information System! Update
+      </Title>
 
       <form onSubmit={form.onSubmit(onSubmitHandler as any)}>
         <Paper withBorder shadow="md" p={30} mt={30} radius="md">
