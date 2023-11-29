@@ -2,7 +2,6 @@ import React from "react";
 import {
   Button,
   Container,
-  Text,
   Paper,
   PasswordInput,
   TextInput,
@@ -52,9 +51,7 @@ const LoginPage: React.FC = () => {
         pauseOnHover
         theme="light"
       />
-      <Title style={{ textAlign: "center" }}>
-        Voters Information System! Update
-      </Title>
+      <Title style={{ textAlign: "center" }}>Voters Information System!</Title>
 
       <form onSubmit={form.onSubmit(onSubmitHandler as any)}>
         <Paper withBorder shadow="md" p={30} mt={30} radius="md">
